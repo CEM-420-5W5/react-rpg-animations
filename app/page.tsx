@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { useRef, useState, type CSSProperties } from "react";
 
 // ---------------------------------------------------------------------------
 // Durées (en ms)
@@ -98,33 +98,6 @@ const FLIP: Keyframe[] = [
   { offset: 1, transform: "perspective(400px) scale(1) rotateY(0deg)" },
 ];
 
-// ---------------------------------------------------------------------------
-// Composant qui rejoue une animation JS à chaque incrément de `trigger`
-// (équivalent de `transition(':increment', ...)` d'Angular)
-// ---------------------------------------------------------------------------
-function Anim({
-  trigger,
-  keyframes,
-  options,
-  children,
-}: {
-  trigger: number;
-  keyframes: Keyframe[];
-  options: KeyframeAnimationOptions;
-  children: ReactNode;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-
-  // Ne rejoue l'animation que lorsque `trigger` change (pas à chaque rendu)
-  useEffect(() => {
-    if (trigger === 0) return;
-    ref.current?.animate(keyframes, options);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [trigger]);
-
-  return <div ref={ref}>{children}</div>;
-}
-
 const opts = (duration: number, extra: KeyframeAnimationOptions = {}): KeyframeAnimationOptions => ({
   duration,
   fill: "both",
@@ -136,17 +109,7 @@ const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 export default function Home() {
   const [slimeIsPresent, setSlimeIsPresent] = useState(false);
 
-  // Compteurs qui déclenchent les animations du slime
-  const [ngDeath, setNgDeath] = useState(0);
-  const [ngAttack, setNgAttack] = useState(0);
-  const [ngPreAttack, setNgPreAttack] = useState(0);
-
-  // 2e partie
-  const [ngBounce, setNgBounce] = useState(0);
-  const [ngShake, setNgShake] = useState(0);
-  const [ngFlip, setNgFlip] = useState(0);
-
-  // Références DOM pilotées directement en JavaScript
+  // Références DOM sur lesquelles on appelle directement `animate`
   const slimeRef = useRef<HTMLImageElement>(null);
   const hitRef = useRef<HTMLDivElement>(null);
   const spinRef = useRef<HTMLDivElement>(null);
@@ -159,13 +122,13 @@ export default function Home() {
   const death = () => {
     setSlimeIsPresent(false);
     slimeRef.current?.animate(FADE_OUT, { duration: FADE_DURATION_MS, fill: "forwards" });
-    setNgDeath((n) => n + 1);
+    slimeRef.current?.animate(SHAKE_X, opts(DEATH_DURATION_MS));
   };
 
   const attack = async () => {
-    setNgPreAttack((n) => n + 1);
+    slimeRef.current?.animate(JELLO, opts(PREATTACK_JELLO_DURATION_MS));
     await wait(ATTACK_DELAY_MS);
-    setNgAttack((n) => n + 1);
+    slimeRef.current?.animate(PULSE, opts(ATTACK_PULSE_DURATION_MS));
   };
 
   const hit = () => {
@@ -173,11 +136,11 @@ export default function Home() {
   };
 
   const bounceShakeFlip = async () => {
-    setNgBounce((n) => n + 1);
+    slimeRef.current?.animate(BOUNCE, opts(BOUNCE_DURATION_MS));
     await wait(BOUNCE_DURATION_MS);
-    setNgShake((n) => n + 1);
+    slimeRef.current?.animate(SHAKE_X, opts(SHAKE_DURATION_MS));
     await wait(SHAKE_DURATION_MS);
-    setNgFlip((n) => n + 1);
+    slimeRef.current?.animate(FLIP, opts(FLIP_DURATION_MS));
   };
 
   // Attend la fin d'une animation JS sur l'élément spin
@@ -234,26 +197,14 @@ export default function Home() {
         >
           <div ref={hitRef}>
             <div ref={spinRef}>
-              <Anim trigger={ngDeath} keyframes={SHAKE_X} options={opts(DEATH_DURATION_MS)}>
-                <Anim trigger={ngAttack} keyframes={PULSE} options={opts(ATTACK_PULSE_DURATION_MS)}>
-                  <Anim trigger={ngPreAttack} keyframes={JELLO} options={opts(PREATTACK_JELLO_DURATION_MS)}>
-                    <Anim trigger={ngBounce} keyframes={BOUNCE} options={opts(BOUNCE_DURATION_MS)}>
-                      <Anim trigger={ngShake} keyframes={SHAKE_X} options={opts(SHAKE_DURATION_MS)}>
-                        <Anim trigger={ngFlip} keyframes={FLIP} options={opts(FLIP_DURATION_MS)}>
-                          <img
-                            ref={slimeRef}
-                            id="slimeyId"
-                            width={150}
-                            src="/slimeyWithBorder.png"
-                            alt="Slimey"
-                            style={{ opacity: 0, display: "block" }}
-                          />
-                        </Anim>
-                      </Anim>
-                    </Anim>
-                  </Anim>
-                </Anim>
-              </Anim>
+              <img
+                ref={slimeRef}
+                id="slimeyId"
+                width={150}
+                src="/slimeyWithBorder.png"
+                alt="Slimey"
+                style={{ opacity: 0, display: "block" }}
+              />
             </div>
           </div>
         </div>
