@@ -106,7 +106,7 @@ const FLIP: Keyframe[] = [
 // TODO: Écrire les keyframes comme demandé dans l'énoncé
 
 // TODO: FADE_IN : de transparent à visible
-const FADE_IN: Keyframe[] = [{ opacity: 0 }, { opacity: 1 }];
+const FADE_IN: Keyframe[] = [{ opacity: 1 }];
 
 // TODO: FADE_OUT : devient transparent
 const FADE_OUT: Keyframe[] = [{ opacity: 0 }];
@@ -154,12 +154,6 @@ export default function Home() {
     await animer("slimeyId", PULSE, ATTACK_DURATION_MS);
   };
 
-  const hit = async () => {
-    // TODO: hit
-    // On anime le parent (div) de l'image, pas l'image elle-même
-    await animer("slimeyParentId", WOBBLE, HIT_DURATION_MS);
-  };
-
   const bounceShakeFlip = async () => {
     // TODO: bounceShakeFlip
     await animer("slimeyId", BOUNCE, BOUNCE_DURATION_MS);
@@ -171,10 +165,11 @@ export default function Home() {
     // TODO: infiniteTripleSpin
     // Boucle infinie : 2 rotations au centre, puis 1 rotation horizontale
     // On n'utilisera pas l'option de boucler l'animation, car on veut 2 rotations au centre puis 1 rotation horizontale, et non pas 3 rotations au centre
+    // Utilisez donc un while(true)
     while (true) {
-      await animer("slimeyParentId", ROTATE_CENTER, ROTATE_CENTER_DURATION_MS);
-      await animer("slimeyParentId", ROTATE_CENTER, ROTATE_CENTER_DURATION_MS);
-      await animer("slimeyParentId", ROTATE_HOR, ROTATE_HOR_DURATION_MS);
+      await animer("slimeyId", ROTATE_CENTER, ROTATE_CENTER_DURATION_MS);
+      await animer("slimeyId", ROTATE_CENTER, ROTATE_CENTER_DURATION_MS);
+      await animer("slimeyId", ROTATE_HOR, ROTATE_HOR_DURATION_MS);
     }
     // TODO: Optionnel: Un petit défi, vous pourriez faire une seule animation qui combine les 3 rotations et utilisé l'option de boucle
   };
@@ -203,7 +198,6 @@ export default function Home() {
           alt="Fond"
         />
         <div
-          id="slimeyParentId"
           style={{
             width: "fit-content",
             position: "absolute",
@@ -235,9 +229,6 @@ export default function Home() {
             </button>
             <button style={buttonStyle} onClick={attack}>
               Attack
-            </button>
-            <button style={buttonStyle} onClick={hit}>
-              Hit
             </button>
             <button style={buttonStyle} onClick={bounceShakeFlip}>
               Bounce/Shake/Flip
