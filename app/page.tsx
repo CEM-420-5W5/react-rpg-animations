@@ -4,14 +4,10 @@ import { useState, type CSSProperties } from "react";
 
 /* ===========================================================================
  * EXERCICE : Animations JS avec React
- *
- * Légende des commentaires :
- *   FOURNI     -> code déjà présent dans le projet de départ (ne pas modifier)
- *   ÉTUDIANT   -> code que l'étudiant doit écrire (la solution est ici)
  * ======================================================================== */
 
 // ---------------------------------------------------------------------------
-// FOURNI : méthode utilitaire vue dans le cours (11-AnimationsJS)
+// méthode utilitaire vue dans le cours
 // ---------------------------------------------------------------------------
 const animer = async (
   elementId: string,
@@ -29,23 +25,25 @@ const animer = async (
 };
 
 // ---------------------------------------------------------------------------
-// FOURNI : durées des animations (en millisecondes)
+// durées des animations (en millisecondes)
 // ---------------------------------------------------------------------------
 const SPAWN_DURATION_MS = 500;
 const DEATH_DURATION_MS = 500;
+
 const PREATTACK_DURATION_MS = 500;
 const ATTACK_DURATION_MS = 300;
+
 const HIT_DURATION_MS = 800;
 
-// 2e partie
 const BOUNCE_DURATION_MS = 1000;
 const SHAKE_DURATION_MS = 750;
 const FLIP_DURATION_MS = 750;
+
 const ROTATE_CENTER_DURATION_MS = 800;
 const ROTATE_HOR_DURATION_MS = 700;
 
 // ---------------------------------------------------------------------------
-// FOURNI : keyframes complexes (générés avec un outil, l'étudiant ne les écrit pas)
+// keyframes complexes, pas besoin de les modifier!
 // ---------------------------------------------------------------------------
 const SHAKE_X: Keyframe[] = [
   { transform: "translateX(0)" },
@@ -84,7 +82,6 @@ const WOBBLE: Keyframe[] = [
   { transform: "translateX(0%) rotate(0deg)" },
 ];
 
-// 2e partie
 const BOUNCE: Keyframe[] = [
   { transform: "translateY(0)" },
   { transform: "translateY(0)", offset: 0.2 },
@@ -133,9 +130,6 @@ export default function Home() {
   // détermine quels boutons sont affichés
   const [slimeIsPresent, setSlimeIsPresent] = useState(false);
 
-  // -------------------------------------------------------------------------
-  // PARTIE 1 : Spawn / Death
-  // -------------------------------------------------------------------------
   const spawn = () => {
     setSlimeIsPresent(true);
 
@@ -153,9 +147,6 @@ export default function Home() {
     animer("slimeyId", FADE_OUT, SPAWN_DURATION_MS, true);
   };
 
-  // -------------------------------------------------------------------------
-  // PARTIE 1 : Attack
-  // -------------------------------------------------------------------------
   const attack = async () => {
     // TODO: attack
     // await : on attend la fin de l'élan avant de jouer l'attaque
@@ -163,18 +154,12 @@ export default function Home() {
     await animer("slimeyId", PULSE, ATTACK_DURATION_MS);
   };
 
-  // -------------------------------------------------------------------------
-  // PARTIE 1 : Hit
-  // -------------------------------------------------------------------------
   const hit = async () => {
     // TODO: hit
     // On anime le parent (div) de l'image, pas l'image elle-même
     await animer("slimeyParentId", WOBBLE, HIT_DURATION_MS);
   };
 
-  // -------------------------------------------------------------------------
-  // PARTIE 2 : Bounce / Shake / Flip
-  // -------------------------------------------------------------------------
   const bounceShakeFlip = async () => {
     // TODO: bounceShakeFlip
     await animer("slimeyId", BOUNCE, BOUNCE_DURATION_MS);
@@ -182,9 +167,6 @@ export default function Home() {
     await animer("slimeyId", FLIP, FLIP_DURATION_MS);
   };
 
-  // -------------------------------------------------------------------------
-  // PARTIE 2 : Infinite Triple Spin
-  // -------------------------------------------------------------------------
   const infiniteTripleSpin = async () => {
     // TODO: infiniteTripleSpin
     // Boucle infinie : 2 rotations au centre, puis 1 rotation horizontale
@@ -198,7 +180,7 @@ export default function Home() {
   };
 
   // -------------------------------------------------------------------------
-  // Affichage, Il n'y a rien à modifier ici
+  // Affichage, Il n'y a rien à modifier dans le reste du fichier!
   // -------------------------------------------------------------------------
   const buttonStyle: CSSProperties = {
     margin: "0 8px 8px 0",
