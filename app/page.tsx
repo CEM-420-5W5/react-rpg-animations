@@ -1,172 +1,209 @@
 "use client";
 
-import { useRef, useState, type CSSProperties } from "react";
+import { useState, type CSSProperties } from "react";
+
+/* ===========================================================================
+ * EXERCICE : Animations JS avec React
+ *
+ * Légende des commentaires :
+ *   FOURNI     -> code déjà présent dans le projet de départ (ne pas modifier)
+ *   ÉTUDIANT   -> code que l'étudiant doit écrire (la solution est ici)
+ * ======================================================================== */
 
 // ---------------------------------------------------------------------------
-// Durées (en ms)
+// FOURNI : méthode utilitaire vue dans le cours (11-AnimationsJS)
 // ---------------------------------------------------------------------------
-const FADE_DURATION_MS = 500;
+const animer = async (
+  elementId: string,
+  keyframes: Keyframe[],
+  durationMS: number,
+  garderLesValeursFinales: boolean = false,
+) => {
+  const element = document.getElementById(elementId);
+
+  const animation = element?.animate(keyframes, {
+    duration: durationMS,
+    fill: garderLesValeursFinales ? "forwards" : "none",
+  });
+  await animation?.finished;
+};
+
+// ---------------------------------------------------------------------------
+// FOURNI : durées des animations (en millisecondes)
+// ---------------------------------------------------------------------------
+const SPAWN_DURATION_MS = 500;
 const DEATH_DURATION_MS = 500;
-const PREATTACK_JELLO_DURATION_MS = 500;
-const ATTACK_PULSE_DURATION_MS = 300;
-const HIT_WOBBLE_DURATION_MS = 800;
-const ATTACK_DELAY_MS = 200;
+const PREATTACK_DURATION_MS = 500;
+const ATTACK_DURATION_MS = 300;
+const HIT_DURATION_MS = 800;
 
 // 2e partie
 const BOUNCE_DURATION_MS = 1000;
 const SHAKE_DURATION_MS = 750;
-const FLIP_DURATION_MS = 500;
-
+const FLIP_DURATION_MS = 750;
 const ROTATE_CENTER_DURATION_MS = 800;
-const ROTATE_TOP_DURATION_MS = 700;
+const ROTATE_HOR_DURATION_MS = 700;
 
 // ---------------------------------------------------------------------------
-// Keyframes (animations JavaScript via element.animate)
+// FOURNI : keyframes complexes (générés avec un outil, l'étudiant ne les écrit pas)
 // ---------------------------------------------------------------------------
+const SHAKE_X: Keyframe[] = [
+  { transform: "translateX(0)" },
+  { transform: "translateX(-10px)", offset: 0.1 },
+  { transform: "translateX(10px)", offset: 0.2 },
+  { transform: "translateX(-10px)", offset: 0.3 },
+  { transform: "translateX(10px)", offset: 0.4 },
+  { transform: "translateX(-10px)", offset: 0.5 },
+  { transform: "translateX(10px)", offset: 0.6 },
+  { transform: "translateX(-10px)", offset: 0.7 },
+  { transform: "translateX(10px)", offset: 0.8 },
+  { transform: "translateX(-10px)", offset: 0.9 },
+  { transform: "translateX(0)" },
+];
+
+const JELLO: Keyframe[] = [
+  { transform: "none" },
+  { transform: "none", offset: 0.111 },
+  { transform: "skew(-12.5deg, -12.5deg)", offset: 0.222 },
+  { transform: "skew(6.25deg, 6.25deg)", offset: 0.333 },
+  { transform: "skew(-3.125deg, -3.125deg)", offset: 0.444 },
+  { transform: "skew(1.5625deg, 1.5625deg)", offset: 0.555 },
+  { transform: "skew(-0.78125deg, -0.78125deg)", offset: 0.666 },
+  { transform: "skew(0.390625deg, 0.390625deg)", offset: 0.777 },
+  { transform: "skew(-0.1953125deg, -0.1953125deg)", offset: 0.888 },
+  { transform: "none" },
+];
+
+const WOBBLE: Keyframe[] = [
+  { transform: "translateX(0%) rotate(0deg)" },
+  { transform: "translateX(-30px) rotate(-6deg)", offset: 0.15 },
+  { transform: "translateX(15px) rotate(6deg)", offset: 0.3 },
+  { transform: "translateX(-15px) rotate(-3.6deg)", offset: 0.45 },
+  { transform: "translateX(9px) rotate(2.4deg)", offset: 0.6 },
+  { transform: "translateX(-6px) rotate(-1.2deg)", offset: 0.75 },
+  { transform: "translateX(0%) rotate(0deg)" },
+];
+
+// 2e partie
+const BOUNCE: Keyframe[] = [
+  { transform: "translateY(0)" },
+  { transform: "translateY(0)", offset: 0.2 },
+  { transform: "translateY(-30px)", offset: 0.4 },
+  { transform: "translateY(0)", offset: 0.5 },
+  { transform: "translateY(-15px)", offset: 0.6 },
+  { transform: "translateY(0)", offset: 0.8 },
+  { transform: "translateY(0)" },
+];
+
+const FLIP: Keyframe[] = [
+  { transform: "perspective(400px) rotateY(-360deg)" },
+  { transform: "perspective(400px) translateZ(150px) rotateY(-190deg)", offset: 0.4 },
+  { transform: "perspective(400px) translateZ(150px) rotateY(-170deg)", offset: 0.5 },
+  { transform: "perspective(400px) scale(0.95) rotateY(0deg)", offset: 0.8 },
+  { transform: "perspective(400px) scale(1) rotateY(0deg)" },
+];
+
+// ---------------------------------------------------------------------------
+// ÉTUDIANT : keyframes simples à écrire (une ou deux valeurs seulement)
+// ---------------------------------------------------------------------------
+// >>> DÉBUT CODE ÉTUDIANT : keyframes <<<
+
+// Apparition : de transparent à visible
 const FADE_IN: Keyframe[] = [{ opacity: 0 }, { opacity: 1 }];
-const FADE_OUT: Keyframe[] = [{ opacity: 1 }, { opacity: 0 }];
 
-const WOBBLE_HOR_BOTTOM: Keyframe[] = [
-  { offset: 0, transform: "translateX(0%) rotate(0deg)" },
-  { offset: 0.15, transform: "translateX(-30px) rotate(-6deg)" },
-  { offset: 0.3, transform: "translateX(15px) rotate(6deg)" },
-  { offset: 0.45, transform: "translateX(-15px) rotate(-3.6deg)" },
-  { offset: 0.6, transform: "translateX(9px) rotate(2.4deg)" },
-  { offset: 0.75, transform: "translateX(-6px) rotate(-1.2deg)" },
-  { offset: 1, transform: "translateX(0%) rotate(0deg)" },
-];
+// Disparition : on ne donne que la valeur finale
+const FADE_OUT: Keyframe[] = [{ opacity: 0 }];
 
-const ROTATE_CENTER: Keyframe[] = [
-  { transform: "rotate(0deg)" },
-  { transform: "rotate(360deg)" },
-];
-
-const ROTATE_HOR_TOP: Keyframe[] = [
-  { transform: "rotateX(0deg)" },
-  { transform: "rotateX(-360deg)" },
-];
-
-// shakeX (ng-animate) : 10 segments alternés
-const SHAKE_X: Keyframe[] = Array.from({ length: 11 }, (_, i) => ({
-  offset: i / 10,
-  transform:
-    i === 0 || i === 10
-      ? "translateX(0)"
-      : i % 2 === 1
-        ? "translateX(-10px)"
-        : "translateX(10px)",
-}));
-
-// pulse (ng-animate) : agrandissement au milieu
+// Attaque : le slime grossit puis revient à sa taille normale (3 valeurs)
 const PULSE: Keyframe[] = [
   { transform: "scale(1)" },
-  { offset: 0.5, transform: "scale(4.5)" },
+  { transform: "scale(4.5)" },
   { transform: "scale(1)" },
 ];
 
-// jello (ng-animate)
-const JELLO: Keyframe[] = [
-  { offset: 0, transform: "none" },
-  { offset: 0.111, transform: "none" },
-  { offset: 0.222, transform: "skew(-12.5deg, -12.5deg)" },
-  { offset: 0.333, transform: "skew(6.25deg, 6.25deg)" },
-  { offset: 0.444, transform: "skew(-3.125deg, -3.125deg)" },
-  { offset: 0.555, transform: "skew(1.5625deg, 1.5625deg)" },
-  { offset: 0.666, transform: "skew(-0.78125deg, -0.78125deg)" },
-  { offset: 0.777, transform: "skew(0.390625deg, 0.390625deg)" },
-  { offset: 0.888, transform: "skew(-0.1953125deg, -0.1953125deg)" },
-  { offset: 1, transform: "none" },
-];
+// 2e partie : une rotation complète autour du centre
+const ROTATE_CENTER: Keyframe[] = [{ transform: "rotate(360deg)" }];
 
-// bounce (ng-animate)
-const BOUNCE: Keyframe[] = [
-  { offset: 0, transform: "translateY(0)" },
-  { offset: 0.2, transform: "translateY(0)" },
-  { offset: 0.4, transform: "translateY(-30px)" },
-  { offset: 0.5, transform: "translateY(0)" },
-  { offset: 0.6, transform: "translateY(-15px)" },
-  { offset: 0.8, transform: "translateY(0)" },
-  { offset: 1, transform: "translateY(0)" },
-];
+// 2e partie : une rotation complète sur l'axe horizontal
+const ROTATE_HOR: Keyframe[] = [{ transform: "rotateX(360deg)" }];
 
-// flip (ng-animate)
-const FLIP: Keyframe[] = [
-  { offset: 0, transform: "perspective(400px) rotateY(-360deg)", easing: "ease-out" },
-  { offset: 0.4, transform: "perspective(400px) translateZ(150px) rotateY(-190deg)", easing: "ease-out" },
-  { offset: 0.5, transform: "perspective(400px) translateZ(150px) rotateY(-170deg)", easing: "ease-in" },
-  { offset: 0.8, transform: "perspective(400px) scale(0.95) rotateY(0deg)", easing: "ease-in" },
-  { offset: 1, transform: "perspective(400px) scale(1) rotateY(0deg)" },
-];
-
-const opts = (duration: number, extra: KeyframeAnimationOptions = {}): KeyframeAnimationOptions => ({
-  duration,
-  fill: "both",
-  ...extra,
-});
-
-const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+// >>> FIN CODE ÉTUDIANT : keyframes <<<
 
 export default function Home() {
+  // FOURNI : détermine quels boutons sont affichés
   const [slimeIsPresent, setSlimeIsPresent] = useState(false);
 
-  // Références DOM sur lesquelles on appelle directement `animate`
-  const slimeRef = useRef<HTMLImageElement>(null);
-  const hitRef = useRef<HTMLDivElement>(null);
-  const spinRef = useRef<HTMLDivElement>(null);
-
+  // -------------------------------------------------------------------------
+  // PARTIE 1 : Spawn / Death
+  // -------------------------------------------------------------------------
   const spawn = () => {
     setSlimeIsPresent(true);
-    slimeRef.current?.animate(FADE_IN, { duration: FADE_DURATION_MS, fill: "forwards" });
+
+    // >>> DÉBUT CODE ÉTUDIANT : spawn <<<
+    // On garde les valeurs finales (opacity: 1), sinon Slimey redevient invisible
+    animer("slimeyId", FADE_IN, SPAWN_DURATION_MS, true);
+    // >>> FIN CODE ÉTUDIANT : spawn <<<
   };
 
   const death = () => {
     setSlimeIsPresent(false);
-    slimeRef.current?.animate(FADE_OUT, { duration: FADE_DURATION_MS, fill: "forwards" });
-    slimeRef.current?.animate(SHAKE_X, opts(DEATH_DURATION_MS));
+
+    // >>> DÉBUT CODE ÉTUDIANT : death <<<
+    // Les deux animations jouent en même temps (pas de await entre les deux)
+    animer("slimeyId", SHAKE_X, DEATH_DURATION_MS);
+    animer("slimeyId", FADE_OUT, SPAWN_DURATION_MS, true);
+    // >>> FIN CODE ÉTUDIANT : death <<<
   };
 
+  // -------------------------------------------------------------------------
+  // PARTIE 1 : Attack
+  // -------------------------------------------------------------------------
   const attack = async () => {
-    slimeRef.current?.animate(JELLO, opts(PREATTACK_JELLO_DURATION_MS));
-    await wait(ATTACK_DELAY_MS);
-    slimeRef.current?.animate(PULSE, opts(ATTACK_PULSE_DURATION_MS));
+    // >>> DÉBUT CODE ÉTUDIANT : attack <<<
+    // await : on attend la fin de l'élan avant de jouer l'attaque
+    await animer("slimeyId", JELLO, PREATTACK_DURATION_MS);
+    await animer("slimeyId", PULSE, ATTACK_DURATION_MS);
+    // >>> FIN CODE ÉTUDIANT : attack <<<
   };
 
-  const hit = () => {
-    hitRef.current?.animate(WOBBLE_HOR_BOTTOM, opts(HIT_WOBBLE_DURATION_MS));
+  // -------------------------------------------------------------------------
+  // PARTIE 1 : Hit
+  // -------------------------------------------------------------------------
+  const hit = async () => {
+    // >>> DÉBUT CODE ÉTUDIANT : hit <<<
+    // On anime le parent (div) de l'image, pas l'image elle-même
+    await animer("slimeyParentId", WOBBLE, HIT_DURATION_MS);
+    // >>> FIN CODE ÉTUDIANT : hit <<<
   };
 
+  // -------------------------------------------------------------------------
+  // PARTIE 2 : Bounce / Shake / Flip
+  // -------------------------------------------------------------------------
   const bounceShakeFlip = async () => {
-    slimeRef.current?.animate(BOUNCE, opts(BOUNCE_DURATION_MS));
-    await wait(BOUNCE_DURATION_MS);
-    slimeRef.current?.animate(SHAKE_X, opts(SHAKE_DURATION_MS));
-    await wait(SHAKE_DURATION_MS);
-    slimeRef.current?.animate(FLIP, opts(FLIP_DURATION_MS));
+    // >>> DÉBUT CODE ÉTUDIANT : bounceShakeFlip <<<
+    await animer("slimeyId", BOUNCE, BOUNCE_DURATION_MS);
+    await animer("slimeyId", SHAKE_X, SHAKE_DURATION_MS);
+    await animer("slimeyId", FLIP, FLIP_DURATION_MS);
+    // >>> FIN CODE ÉTUDIANT : bounceShakeFlip <<<
   };
 
-  // Attend la fin d'une animation JS sur l'élément spin
-  const spin = (keyframes: Keyframe[], options: KeyframeAnimationOptions) =>
-    spinRef.current?.animate(keyframes, options).finished ?? Promise.resolve();
-
-  const centerSpin = () =>
-    spin(
-      ROTATE_CENTER,
-      opts(ROTATE_CENTER_DURATION_MS, {
-        easing: "cubic-bezier(0.895, 0.030, 0.685, 0.220)",
-        iterations: 2,
-      }),
-    );
-
-  const topSpin = () =>
-    spin(ROTATE_HOR_TOP, opts(ROTATE_TOP_DURATION_MS, { easing: "ease-in-out" }));
-
+  // -------------------------------------------------------------------------
+  // PARTIE 2 : Infinite Triple Spin
+  // -------------------------------------------------------------------------
   const infiniteTripleSpin = async () => {
-    // Boucle infinie : centre (x2) puis haut, comme dans la version Angular
-    for (;;) {
-      await centerSpin();
-      await topSpin();
+    // >>> DÉBUT CODE ÉTUDIANT : infiniteTripleSpin <<<
+    // Boucle infinie : 2 rotations au centre, puis 1 rotation horizontale
+    while (true) {
+      await animer("slimeyParentId", ROTATE_CENTER, ROTATE_CENTER_DURATION_MS);
+      await animer("slimeyParentId", ROTATE_CENTER, ROTATE_CENTER_DURATION_MS);
+      await animer("slimeyParentId", ROTATE_HOR, ROTATE_HOR_DURATION_MS);
     }
+    // >>> FIN CODE ÉTUDIANT : infiniteTripleSpin <<<
   };
 
+  // -------------------------------------------------------------------------
+  // FOURNI : affichage
+  // -------------------------------------------------------------------------
   const buttonStyle: CSSProperties = {
     margin: "0 8px 8px 0",
     padding: "8px 16px",
@@ -188,6 +225,7 @@ export default function Home() {
           alt="Fond"
         />
         <div
+          id="slimeyParentId"
           style={{
             width: "fit-content",
             position: "absolute",
@@ -195,18 +233,14 @@ export default function Home() {
             left: 350,
           }}
         >
-          <div ref={hitRef}>
-            <div ref={spinRef}>
-              <img
-                ref={slimeRef}
-                id="slimeyId"
-                width={150}
-                src="/slimeyWithBorder.png"
-                alt="Slimey"
-                style={{ opacity: 0, display: "block" }}
-              />
-            </div>
-          </div>
+          {/* Slimey est invisible au départ (opacity: 0) */}
+          <img
+            id="slimeyId"
+            width={150}
+            src="/slimeyWithBorder.png"
+            alt="Slimey"
+            style={{ opacity: 0, display: "block" }}
+          />
         </div>
       </div>
 
