@@ -172,7 +172,12 @@ export default function Home() {
   const infiniteTripleSpinBonus = async () => {
     // TODO: infiniteTripleSpinBonus
     // TODO: Optionnel: Un petit défi, vous pourriez faire une seule animation qui combine les 3 rotations et utilisé l'option de boucle
-    await animer("slimeyId", BONUS, ROTATE_CENTER_DURATION_MS + ROTATE_CENTER_DURATION_MS + ROTATE_HOR_DURATION_MS);
+    const element = document.getElementById("slimeyId");
+
+    element?.animate(BONUS, {
+      duration: ROTATE_CENTER_DURATION_MS + ROTATE_CENTER_DURATION_MS + ROTATE_HOR_DURATION_MS,
+      iterations: Infinity
+    });
   };
 
   // -------------------------------------------------------------------------
