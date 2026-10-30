@@ -106,23 +106,14 @@ const FLIP: Keyframe[] = [
 // TODO: Écrire les keyframes comme demandé dans l'énoncé
 
 // TODO: FADE_IN : de transparent à visible
-const FADE_IN: Keyframe[] = [{ opacity: 0 }, { opacity: 1 }];
 
 // TODO: FADE_OUT : devient transparent
-const FADE_OUT: Keyframe[] = [{ opacity: 0 }];
 
 // TODO: PULSE : le slime grossit puis revient à sa taille normale (3 valeurs)
-const PULSE: Keyframe[] = [
-  { transform: "scale(1)" },
-  { transform: "scale(4.5)" },
-  { transform: "scale(1)" },
-];
 
 // TODO: ROTATE_CENTER : une rotation complète autour du centre
-const ROTATE_CENTER: Keyframe[] = [{ transform: "rotate(360deg)" }];
 
 // TODO: ROTATE_HOR : une rotation complète sur l'axe horizontal
-const ROTATE_HOR: Keyframe[] = [{ transform: "rotateX(360deg)" }];
 
 // FIN keyframes
 
@@ -135,7 +126,7 @@ export default function Home() {
 
     // TODO: spawn
     // On garde les valeurs finales (opacity: 1), sinon Slimey redevient invisible
-    animer("slimeyId", FADE_IN, SPAWN_DURATION_MS, true);
+    
   };
 
   const death = () => {
@@ -143,39 +134,31 @@ export default function Home() {
 
     // TODO: death
     // Les deux animations jouent en même temps (pas de await entre les deux)
-    animer("slimeyId", SHAKE_X, DEATH_DURATION_MS);
-    animer("slimeyId", FADE_OUT, SPAWN_DURATION_MS, true);
+    
   };
 
   const attack = async () => {
     // TODO: attack
     // await : on attend la fin de l'élan avant de jouer l'attaque
-    await animer("slimeyId", JELLO, PREATTACK_DURATION_MS);
-    await animer("slimeyId", PULSE, ATTACK_DURATION_MS);
+    
   };
 
   const hit = async () => {
     // TODO: hit
     // On anime le parent (div) de l'image, pas l'image elle-même
-    await animer("slimeyParentId", WOBBLE, HIT_DURATION_MS);
+    
   };
 
   const bounceShakeFlip = async () => {
     // TODO: bounceShakeFlip
-    await animer("slimeyId", BOUNCE, BOUNCE_DURATION_MS);
-    await animer("slimeyId", SHAKE_X, SHAKE_DURATION_MS);
-    await animer("slimeyId", FLIP, FLIP_DURATION_MS);
+    
   };
 
   const infiniteTripleSpin = async () => {
     // TODO: infiniteTripleSpin
     // Boucle infinie : 2 rotations au centre, puis 1 rotation horizontale
     // On n'utilisera pas l'option de boucler l'animation, car on veut 2 rotations au centre puis 1 rotation horizontale, et non pas 3 rotations au centre
-    while (true) {
-      await animer("slimeyParentId", ROTATE_CENTER, ROTATE_CENTER_DURATION_MS);
-      await animer("slimeyParentId", ROTATE_CENTER, ROTATE_CENTER_DURATION_MS);
-      await animer("slimeyParentId", ROTATE_HOR, ROTATE_HOR_DURATION_MS);
-    }
+    
     // TODO: Optionnel: Un petit défi, vous pourriez faire une seule animation qui combine les 3 rotations et utilisé l'option de boucle
   };
 
