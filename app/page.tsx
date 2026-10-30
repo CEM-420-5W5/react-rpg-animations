@@ -143,12 +143,6 @@ export default function Home() {
     
   };
 
-  const hit = async () => {
-    // TODO: hit
-    // On anime le parent (div) de l'image, pas l'image elle-même
-    
-  };
-
   const bounceShakeFlip = async () => {
     // TODO: bounceShakeFlip
     
@@ -186,7 +180,6 @@ export default function Home() {
           alt="Fond"
         />
         <div
-          id="slimeyParentId"
           style={{
             width: "fit-content",
             position: "absolute",
@@ -218,9 +211,6 @@ export default function Home() {
             </button>
             <button style={buttonStyle} onClick={attack}>
               Attack
-            </button>
-            <button style={buttonStyle} onClick={hit}>
-              Hit
             </button>
             <button style={buttonStyle} onClick={bounceShakeFlip}>
               Bounce/Shake/Flip
