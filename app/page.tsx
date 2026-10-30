@@ -37,8 +37,7 @@ const BOUNCE_DURATION_MS = 1000;
 const SHAKE_DURATION_MS = 750;
 const FLIP_DURATION_MS = 750;
 
-const ROTATE_CENTER_DURATION_MS = 800;
-const ROTATE_HOR_DURATION_MS = 700;
+const ROTATE_DURATION_MS = 800;
 
 // ---------------------------------------------------------------------------
 // keyframes complexes, pas besoin de les modifier!
@@ -81,11 +80,11 @@ const BOUNCE: Keyframe[] = [
 ];
 
 const FLIP: Keyframe[] = [
-  { transform: "perspective(400px) rotateY(-360deg)" },
-  { transform: "perspective(400px) translateZ(150px) rotateY(-190deg)", offset: 0.4 },
-  { transform: "perspective(400px) translateZ(150px) rotateY(-170deg)", offset: 0.5 },
-  { transform: "perspective(400px) scale(0.95) rotateY(0deg)", offset: 0.8 },
-  { transform: "perspective(400px) scale(1) rotateY(0deg)" },
+  { transform: "rotateY(-360deg)" },
+  { transform: "translateZ(150px) rotateY(-190deg)", offset: 0.4 },
+  { transform: "translateZ(150px) rotateY(-170deg)", offset: 0.5 },
+  { transform: "scale(0.95) rotateY(0deg)", offset: 0.8 },
+  { transform: "scale(1) rotateY(0deg)" },
 ];
 
 // ---------------------------------------------------------------------------
