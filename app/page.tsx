@@ -162,6 +162,11 @@ export default function Home() {
     // TODO: Optionnel: Un petit défi, vous pourriez faire une seule animation qui combine les 3 rotations et utilisé l'option de boucle
   };
 
+  const infiniteTripleSpinBonus = async () => {
+    // TODO: infiniteTripleSpinBonus
+    // TODO: Optionnel: Un petit défi, vous pourriez faire une seule animation qui combine les 3 rotations et utilisé l'option de boucle
+  };
+
   // -------------------------------------------------------------------------
   // Affichage, Il n'y a rien à modifier dans le reste du fichier!
   // -------------------------------------------------------------------------
@@ -223,6 +228,9 @@ export default function Home() {
             </button>
             <button style={buttonStyle} onClick={infiniteTripleSpin}>
               Infinite Triple Spin
+            </button>
+            <button style={buttonStyle} onClick={infiniteTripleSpinBonus}>
+              Infinite Triple Spin Bonus
             </button>
           </>
         )}
