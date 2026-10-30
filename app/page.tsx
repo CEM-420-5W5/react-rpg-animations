@@ -104,33 +104,33 @@ const FLIP: Keyframe[] = [
 ];
 
 // ---------------------------------------------------------------------------
-// ÉTUDIANT : keyframes simples à écrire (une ou deux valeurs seulement)
+// keyframes simples à écrire
 // ---------------------------------------------------------------------------
-// >>> DÉBUT CODE ÉTUDIANT : keyframes <<<
+// TODO: Écrire les keyframes comme demandé dans l'énoncé
 
-// Apparition : de transparent à visible
+// TODO: FADE_IN : de transparent à visible
 const FADE_IN: Keyframe[] = [{ opacity: 0 }, { opacity: 1 }];
 
-// Disparition : on ne donne que la valeur finale
+// TODO: FADE_OUT : devient transparent
 const FADE_OUT: Keyframe[] = [{ opacity: 0 }];
 
-// Attaque : le slime grossit puis revient à sa taille normale (3 valeurs)
+// TODO: PULSE : le slime grossit puis revient à sa taille normale (3 valeurs)
 const PULSE: Keyframe[] = [
   { transform: "scale(1)" },
   { transform: "scale(4.5)" },
   { transform: "scale(1)" },
 ];
 
-// 2e partie : une rotation complète autour du centre
+// TODO: ROTATE_CENTER : une rotation complète autour du centre
 const ROTATE_CENTER: Keyframe[] = [{ transform: "rotate(360deg)" }];
 
-// 2e partie : une rotation complète sur l'axe horizontal
+// TODO: ROTATE_HOR : une rotation complète sur l'axe horizontal
 const ROTATE_HOR: Keyframe[] = [{ transform: "rotateX(360deg)" }];
 
-// >>> FIN CODE ÉTUDIANT : keyframes <<<
+// FIN keyframes
 
 export default function Home() {
-  // FOURNI : détermine quels boutons sont affichés
+  // détermine quels boutons sont affichés
   const [slimeIsPresent, setSlimeIsPresent] = useState(false);
 
   // -------------------------------------------------------------------------
@@ -139,70 +139,66 @@ export default function Home() {
   const spawn = () => {
     setSlimeIsPresent(true);
 
-    // >>> DÉBUT CODE ÉTUDIANT : spawn <<<
+    // TODO: spawn
     // On garde les valeurs finales (opacity: 1), sinon Slimey redevient invisible
     animer("slimeyId", FADE_IN, SPAWN_DURATION_MS, true);
-    // >>> FIN CODE ÉTUDIANT : spawn <<<
   };
 
   const death = () => {
     setSlimeIsPresent(false);
 
-    // >>> DÉBUT CODE ÉTUDIANT : death <<<
+    // TODO: death
     // Les deux animations jouent en même temps (pas de await entre les deux)
     animer("slimeyId", SHAKE_X, DEATH_DURATION_MS);
     animer("slimeyId", FADE_OUT, SPAWN_DURATION_MS, true);
-    // >>> FIN CODE ÉTUDIANT : death <<<
   };
 
   // -------------------------------------------------------------------------
   // PARTIE 1 : Attack
   // -------------------------------------------------------------------------
   const attack = async () => {
-    // >>> DÉBUT CODE ÉTUDIANT : attack <<<
+    // TODO: attack
     // await : on attend la fin de l'élan avant de jouer l'attaque
     await animer("slimeyId", JELLO, PREATTACK_DURATION_MS);
     await animer("slimeyId", PULSE, ATTACK_DURATION_MS);
-    // >>> FIN CODE ÉTUDIANT : attack <<<
   };
 
   // -------------------------------------------------------------------------
   // PARTIE 1 : Hit
   // -------------------------------------------------------------------------
   const hit = async () => {
-    // >>> DÉBUT CODE ÉTUDIANT : hit <<<
+    // TODO: hit
     // On anime le parent (div) de l'image, pas l'image elle-même
     await animer("slimeyParentId", WOBBLE, HIT_DURATION_MS);
-    // >>> FIN CODE ÉTUDIANT : hit <<<
   };
 
   // -------------------------------------------------------------------------
   // PARTIE 2 : Bounce / Shake / Flip
   // -------------------------------------------------------------------------
   const bounceShakeFlip = async () => {
-    // >>> DÉBUT CODE ÉTUDIANT : bounceShakeFlip <<<
+    // TODO: bounceShakeFlip
     await animer("slimeyId", BOUNCE, BOUNCE_DURATION_MS);
     await animer("slimeyId", SHAKE_X, SHAKE_DURATION_MS);
     await animer("slimeyId", FLIP, FLIP_DURATION_MS);
-    // >>> FIN CODE ÉTUDIANT : bounceShakeFlip <<<
   };
 
   // -------------------------------------------------------------------------
   // PARTIE 2 : Infinite Triple Spin
   // -------------------------------------------------------------------------
   const infiniteTripleSpin = async () => {
-    // >>> DÉBUT CODE ÉTUDIANT : infiniteTripleSpin <<<
+    // TODO: infiniteTripleSpin
     // Boucle infinie : 2 rotations au centre, puis 1 rotation horizontale
+    // On n'utilisera pas l'option de boucler l'animation, car on veut 2 rotations au centre puis 1 rotation horizontale, et non pas 3 rotations au centre
     while (true) {
       await animer("slimeyParentId", ROTATE_CENTER, ROTATE_CENTER_DURATION_MS);
       await animer("slimeyParentId", ROTATE_CENTER, ROTATE_CENTER_DURATION_MS);
       await animer("slimeyParentId", ROTATE_HOR, ROTATE_HOR_DURATION_MS);
     }
-    // >>> FIN CODE ÉTUDIANT : infiniteTripleSpin <<<
+    // TODO: Optionnel: Un petit défi, vous pourriez faire une seule animation qui combine les 3 rotations et utilisé l'option de boucle
   };
 
   // -------------------------------------------------------------------------
-  // FOURNI : affichage
+  // Affichage, Il n'y a rien à modifier ici
   // -------------------------------------------------------------------------
   const buttonStyle: CSSProperties = {
     margin: "0 8px 8px 0",
@@ -230,13 +226,13 @@ export default function Home() {
             width: "fit-content",
             position: "absolute",
             top: 250,
-            left: 350,
+            left: 300,
           }}
         >
           {/* Slimey est invisible au départ (opacity: 0) */}
           <img
             id="slimeyId"
-            width={150}
+            width={200}
             src="/slimeyWithBorder.png"
             alt="Slimey"
             style={{ opacity: 0, display: "block" }}
