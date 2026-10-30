@@ -33,8 +33,6 @@ const DEATH_DURATION_MS = 500;
 const PREATTACK_DURATION_MS = 500;
 const ATTACK_DURATION_MS = 300;
 
-const HIT_DURATION_MS = 800;
-
 const BOUNCE_DURATION_MS = 1000;
 const SHAKE_DURATION_MS = 750;
 const FLIP_DURATION_MS = 750;
@@ -70,16 +68,6 @@ const JELLO: Keyframe[] = [
   { transform: "skew(0.390625deg, 0.390625deg)", offset: 0.777 },
   { transform: "skew(-0.1953125deg, -0.1953125deg)", offset: 0.888 },
   { transform: "none" },
-];
-
-const WOBBLE: Keyframe[] = [
-  { transform: "translateX(0%) rotate(0deg)" },
-  { transform: "translateX(-30px) rotate(-6deg)", offset: 0.15 },
-  { transform: "translateX(15px) rotate(6deg)", offset: 0.3 },
-  { transform: "translateX(-15px) rotate(-3.6deg)", offset: 0.45 },
-  { transform: "translateX(9px) rotate(2.4deg)", offset: 0.6 },
-  { transform: "translateX(-6px) rotate(-1.2deg)", offset: 0.75 },
-  { transform: "translateX(0%) rotate(0deg)" },
 ];
 
 const BOUNCE: Keyframe[] = [
