@@ -38,7 +38,7 @@ const SHAKE_DURATION_MS = 750;
 const FLIP_DURATION_MS = 750;
 
 const ROTATE_CENTER_DURATION_MS = 800;
-const ROTATE_HOR_DURATION_MS = 700;
+const ROTATE_HOR_DURATION_MS = 800;
 
 // ---------------------------------------------------------------------------
 // keyframes complexes, pas besoin de les modifier!
@@ -81,11 +81,11 @@ const BOUNCE: Keyframe[] = [
 ];
 
 const FLIP: Keyframe[] = [
-  { transform: "perspective(400px) rotateY(-360deg)" },
-  { transform: "perspective(400px) translateZ(150px) rotateY(-190deg)", offset: 0.4 },
-  { transform: "perspective(400px) translateZ(150px) rotateY(-170deg)", offset: 0.5 },
-  { transform: "perspective(400px) scale(0.95) rotateY(0deg)", offset: 0.8 },
-  { transform: "perspective(400px) scale(1) rotateY(0deg)" },
+  { transform: "rotateY(-360deg)" },
+  { transform: "translateZ(150px) rotateY(-190deg)", offset: 0.4 },
+  { transform: "translateZ(150px) rotateY(-170deg)", offset: 0.5 },
+  { transform: "scale(0.95) rotateY(0deg)", offset: 0.8 },
+  { transform: "scale(1) rotateY(0deg)" },
 ];
 
 // ---------------------------------------------------------------------------
@@ -112,7 +112,14 @@ const ROTATE_CENTER: Keyframe[] = [{ transform: "rotate(360deg)" }];
 // TODO: ROTATE_HOR : une rotation complète sur l'axe horizontal
 const ROTATE_HOR: Keyframe[] = [{ transform: "rotateX(360deg)" }];
 
+const BONUS: Keyframe[] = [
+  { transform: "rotate(0deg) rotateX(0deg)" },
+  { transform: "rotate(720deg) rotateX(0deg)", offset: 0.66 },
+  { transform: "rotate(720deg) rotateX(360deg)", offset: 1 }
+];
+
 // FIN keyframes
+
 
 export default function Home() {
   // détermine quels boutons sont affichés
@@ -165,6 +172,7 @@ export default function Home() {
   const infiniteTripleSpinBonus = async () => {
     // TODO: infiniteTripleSpinBonus
     // TODO: Optionnel: Un petit défi, vous pourriez faire une seule animation qui combine les 3 rotations et utilisé l'option de boucle
+    await animer("slimeyId", BONUS, ROTATE_CENTER_DURATION_MS + ROTATE_CENTER_DURATION_MS + ROTATE_HOR_DURATION_MS);
   };
 
   // -------------------------------------------------------------------------
