@@ -102,7 +102,7 @@ const FADE_OUT: Keyframe[] = [{ opacity: 0 }];
 // TODO: PULSE : le slime grossit puis revient à sa taille normale (3 valeurs)
 const PULSE: Keyframe[] = [
   { transform: "scale(1)" },
-  { transform: "scale(4.5)" },
+  { transform: "scale(4.5)", offset: 0.1 },
   { transform: "scale(1)" },
 ];
 
